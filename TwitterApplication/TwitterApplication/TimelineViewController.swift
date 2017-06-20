@@ -27,8 +27,8 @@ var loginClosure: (Bool) -> () = { isSuccess in
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
         
         LoginCommunicator().login() { isSuccess in
             switch isSuccess {
@@ -44,7 +44,15 @@ var loginClosure: (Bool) -> () = { isSuccess in
                     return
                 }
                 
-                print(data)
+                let timelineParser = TimelineParser()
+                let tweets = timelineParser.parse(data: data!)
+                print(tweets)
+                    
+                self?.tweets = tweets
+                
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
             }
         }
     }
@@ -85,6 +93,9 @@ extension TimelineViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // TweetTableViewCellを表示したいので、TweetTableViewCellを取得
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetTableViewCell") as! TweetTableViewCell
+        
+        // TweetTableViewCellの描画内容となるtweetを渡す
+        cell.fill(tweet: tweets[indexPath.row])
         
         return cell
     }
