@@ -12,10 +12,14 @@ class TimelineViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    // テーブル表示用のデータソース
+    var tweets: [Tweet] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.delegate = self
+        self.tableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,5 +43,21 @@ extension TimelineViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // UITableViewCellの高さを自動で取得する値
         return UITableViewAutomaticDimension
+    }
+}
+
+extension TimelineViewController: UITableViewDataSource {
+    // 何個のcellを生成するかを設定する関数
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // tweetsの配列内の要素数分を指定
+        return tweets.count
+    }
+    
+    // 描画するcellを設定する関数
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TweetTableViewCellを表示したいので、TweetTableViewCellを取得
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TweetTableViewCell") as! TweetTableViewCell
+        
+        return cell
     }
 }
