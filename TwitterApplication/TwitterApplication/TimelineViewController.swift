@@ -30,8 +30,25 @@ var loginClosure: (Bool) -> () = { isSuccess in
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        LoginCommunicator().login(handler: loginClosure)
+        LoginCommunicator().login() { isSuccess in
+            switch isSuccess {
+            case false:
+                print("ログイン失敗")
+            case true:
+                print("ログイン成功")
+                
+            TwitterCommunicator().getTimeline() { [weak self] data, error in
+                
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                print(data)
+            }
+        }
     }
+}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
