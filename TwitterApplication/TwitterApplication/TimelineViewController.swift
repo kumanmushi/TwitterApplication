@@ -15,21 +15,22 @@ class TimelineViewController: UIViewController {
     // テーブル表示用のデータソース
     var tweets: [Tweet] = []
     
+var loginClosure: (Bool) -> () = { isSuccess in
+    switch isSuccess {
+    case false:
+        print("ログイン失敗")
+    case true:
+        print("ログイン成功")
+    }
+}
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        // ダミーデータの生成
-        let user = User(id: "1", screenName: "ktanaka117", name: "ダンボー田中", profileImageURL: "https://pbs.twimg.com/profile_images/832034247414206464/PCKoQRPD.jpg")
-        let tweet = Tweet(id: "01", text: "Twitterクライアント作成なう", user: user)
-        
-        let tweets = [tweet]
-        self.tweets = tweets
-        
-        // tableViewのリロード
-        tableView.reloadData()
+        LoginCommunicator().login(handler: loginClosure)
     }
 
     override func didReceiveMemoryWarning() {
