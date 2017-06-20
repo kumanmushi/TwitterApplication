@@ -10,26 +10,34 @@ import UIKit
 
 class TimelineViewController: UIViewController {
 
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.tableView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+}
+
+extension TimelineViewController: UITableViewDelegate {
+    
+    // cellがタップされたのを検知したときに実行する処理
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("セルがタップされたよ！")
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // セルの見積もりの高さを指定する処理
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200
     }
-    */
-
+    
+    // セルの高さ指定をする処理
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // UITableViewCellの高さを自動で取得する値
+        return UITableViewAutomaticDimension
+    }
 }
