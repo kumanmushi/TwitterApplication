@@ -30,6 +30,10 @@ var loginClosure: (Bool) -> () = { isSuccess in
         tableView.delegate = self
         tableView.dataSource = self
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(TimelineViewController.refresh), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        
         LoginCommunicator().login() { isSuccess in
             switch isSuccess {
             case false:
@@ -57,6 +61,29 @@ var loginClosure: (Bool) -> () = { isSuccess in
         }
     }
 }
+    
+    func fetch(){
+        TwitterCommunicator().getTimeline() { [weak self] data, error in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            let timeLineParser = TimelineParser()
+            let tweets = timeLineParser.parse(data: data!)
+            self?.tweets = tweets
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    
+    func refresh() {
+        fetch()
+        tableView.refreshControl?.endRefreshing()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
