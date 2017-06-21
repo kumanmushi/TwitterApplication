@@ -36,4 +36,23 @@ class TweetTableViewCell: UITableViewCell {
         // screenNameには "@" が含まれていないので、頭に "@" を入れてあげる必要がある
         screenNameLabel.text = "@" + tweet.user.screenName
     }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.contentView.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        
+        self.nameLabel.textColor = .white
+        self.screenNameLabel.textColor = .white
+        self.textContentLabel.textColor = .white
+        
+        self.nameLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        self.screenNameLabel.font = UIFont.italicSystemFont(ofSize: 12)
+        self.textContentLabel.font = UIFont.systemFont(ofSize: 14)
+        
+        self.iconImageView.clipsToBounds = true
+        self.iconImageView.layer.cornerRadius = self.iconImageView.frame.size.width / 2.0
+        self.iconImageView.layer.borderColor = UIColor.white.cgColor
+        self.iconImageView.layer.borderWidth = 1.0
+    }
 }
